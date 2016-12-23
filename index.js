@@ -28,18 +28,17 @@ app.delete("/articles/:id", function(req, res) {
 app.put('/articles/:id', function(req, res) {
   var articleToEdit = req.params.id;
   db.article.update({
-  Title: 'req.params.title'
+    title: req.body.title,
+    body: req.body.body
   }, {
-  where: {
-    Body: 'req.params.body'
-  }
-  }).then(function(foo) {
-  res.render("articles/show");
+    where: {
+      id: articleToEdit
+    }
+  }).then(function() {
+    res.status(200).send();
   });
-  res.send({message: 'success'});
 });
 //END UPDATE
-
 
 app.get("/contact", function(req, res){
   res.render("site/contact");
@@ -69,12 +68,19 @@ app.get("/articles/new", function(req, res){
 
 // GET /articles/:id // view: views/articles/show.ejs // purpose: find an article by id in the array of articles and display it.
 app.get("/articles/:id", function(req, res){
-  console.log(req.params.id);
+  // console.log(req.params.id);
   db.article.findById(req.params.id).then(function(article){
-    console.log("article: ", aritcle);
+    // console.log("article: ", aritcle);
     res.render("articles/show", {article: article});
   });
 });
+
+//Edit
+app.get('/articles/:id/edit', function(req, res) {
+  db.article.findById(req.params.id).then(function(article){
+    res.render("articles/edit", {article: article});
+  });
+})
 
 // POST /articles// view: none (redirects to/articles after the article is created) // purpose: creates a new article (adds to articles array and saves the file)
 app.post("/articles", function(req, res){

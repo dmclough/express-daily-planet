@@ -1,6 +1,6 @@
 console.log("JS good to go, sir!");
 
-$('.put-form').on('submit', function(e) {
+$('#put-form').on('submit', function(e) {
   e.preventDefault();
   var element = $(this);
   var url = element.attr('action');
