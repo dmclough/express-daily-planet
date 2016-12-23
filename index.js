@@ -1,6 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var ejsLayouts = require("express-ejs-layouts");
+var path = require('path');
+
 //app variables
 var app = express();
 var db = require("./models");
@@ -8,7 +10,36 @@ var db = require("./models");
 app.set("view engine", "ejs");
 app.use(ejsLayouts);
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'static')));
+
 //routes
+
+//DELETE
+app.delete("/articles/:id", function(req, res) {
+  db.article.destroy({
+    where: { id: req.params.id }
+  }).then(function() {
+    res.send({message: 'success'});
+  });
+});
+//END DELETE
+
+//UPDATE
+app.put('/articles/:id', function(req, res) {
+  var articleToEdit = req.params.id;
+  db.article.update({
+  Title: 'req.params.title'
+  }, {
+  where: {
+    Body: 'req.params.body'
+  }
+  }).then(function(foo) {
+  res.render("articles/show");
+  });
+  res.send({message: 'success'});
+});
+//END UPDATE
+
 
 app.get("/contact", function(req, res){
   res.render("site/contact");
@@ -40,6 +71,7 @@ app.get("/articles/new", function(req, res){
 app.get("/articles/:id", function(req, res){
   console.log(req.params.id);
   db.article.findById(req.params.id).then(function(article){
+    console.log("article: ", aritcle);
     res.render("articles/show", {article: article});
   });
 });

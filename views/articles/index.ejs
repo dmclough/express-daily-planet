@@ -1,6 +1,4 @@
-<p>show article<p>
-<!-- <p><%= articles.length %><p/> -->
-<p>show all article<p>
+<h1>All articles</h1>
 
 <% articles.forEach(function(article) { %>
 <div class="row">
@@ -12,6 +10,9 @@
       </a>
     </p>
     <p>Body: <%= article.body %></p>
+    <br>
+    <a href="#">Edit</a> |
+    <a href="/articles/<%= article.id %>" class="delete-link">Delete</a>
   </div>
 </div>
 <hr>
